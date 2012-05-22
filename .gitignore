@@ -1,0 +1,7 @@
+*.DS_Store
+kk*
+*.log
+*.user
+*.suo
+*.sdf
+*.bak

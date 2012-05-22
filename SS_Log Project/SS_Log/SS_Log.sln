@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SS_Log", "SS_Log.vcproj", "{2DD480FD-4266-46F5-BC56-8BD42C7F7D05}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0526D8FD-C333-45D4-A561-CC8BC8795C26} = {0526D8FD-C333-45D4-A561-CC8BC8795C26}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Utils", "..\Utils\Utils.vcproj", "{0526D8FD-C333-45D4-A561-CC8BC8795C26}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2DD480FD-4266-46F5-BC56-8BD42C7F7D05}.Debug|Win32.ActiveCfg = Debug|Win32
+		{2DD480FD-4266-46F5-BC56-8BD42C7F7D05}.Debug|Win32.Build.0 = Debug|Win32
+		{2DD480FD-4266-46F5-BC56-8BD42C7F7D05}.Release|Win32.ActiveCfg = Release|Win32
+		{2DD480FD-4266-46F5-BC56-8BD42C7F7D05}.Release|Win32.Build.0 = Release|Win32
+		{0526D8FD-C333-45D4-A561-CC8BC8795C26}.Debug|Win32.ActiveCfg = Debug|Win32
+		{0526D8FD-C333-45D4-A561-CC8BC8795C26}.Debug|Win32.Build.0 = Debug|Win32
+		{0526D8FD-C333-45D4-A561-CC8BC8795C26}.Release|Win32.ActiveCfg = Release|Win32
+		{0526D8FD-C333-45D4-A561-CC8BC8795C26}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

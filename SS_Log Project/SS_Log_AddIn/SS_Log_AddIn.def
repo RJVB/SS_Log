@@ -1,0 +1,11 @@
+; SS_Log_AddIn.def : Declares the module parameters for the DLL.
+
+LIBRARY      "SS_LOG_ADDIN"
+DESCRIPTION  'SS_LOG_ADDIN Windows Dynamic Link Library'
+
+EXPORTS
+    ; Explicit exports can go here
+	DllCanUnloadNow PRIVATE
+	DllGetClassObject PRIVATE
+	DllRegisterServer PRIVATE
+	DllUnregisterServer PRIVATE

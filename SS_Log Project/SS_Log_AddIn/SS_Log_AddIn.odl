@@ -1,0 +1,57 @@
+// SS_Log_AddIn.odl : type library source for SS_Log_AddIn.dll
+
+// This file will be processed by the Make Type Library (mktyplib) tool to
+// produce the type library (SS_Log_AddIn.tlb).
+
+[	uuid(FA62656D-B129-4479-B9B8-35D56F80058D), version(1.0),
+	helpstring ("SS_LOG_ADDIN Developer Studio Add-in") ]
+library SS_Log_AddIn
+{
+	importlib("stdole32.tlb");
+	importlib("devshl.dll");
+	importlib("ide\devdbg.pkg");
+	
+
+	//  Dual interface for CCommands
+	//
+	//  All commands that your add-in adds to DevStudio
+	//   must appear in this interface.  You may use the
+	//   ClassView to add methods to this interface, which
+	//   will cause stub implementations of those methods to
+	//   appear in your CCommands class.
+	
+	[	uuid(BA3F3B08-7605-43C2-8299-EFAF977EBCC0),
+		oleautomation,
+		dual
+	]
+
+	interface ICommands : IDispatch
+	{
+		// methods
+		[id(1)]
+		HRESULT SS_Log_AddInCommandMethod();
+	};
+
+	//  Class information for CCommands
+
+	[ uuid(2546CC08-5803-471C-8825-6D6EB071FCD7) ]
+	coclass Commands
+	{
+		[default] interface ICommands;
+	};
+
+	[ hidden, uuid(9314F28B-5EB6-450E-960F-27996534AEE0) ]
+	coclass ApplicationEvents
+	{
+		[default] interface IApplicationEvents;
+	}
+
+	[ hidden, uuid(F7119C0F-1D34-442D-A0CE-01FBA7C9A15F) ]
+	coclass DebuggerEvents
+	{
+		[default] interface IDebuggerEvents;
+	}
+
+	//{{AFX_APPEND_ODL}}
+	//}}AFX_APPEND_ODL}}
+};

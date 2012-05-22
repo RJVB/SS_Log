@@ -1,0 +1,101 @@
+Microsoft Developer Studio Workspace File, Format Version 6.00
+# WARNING: DO NOT EDIT OR DELETE THIS WORKSPACE FILE!
+
+###############################################################################
+
+Project: "Borland"=".\Borland\Borland.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "SS_Log"=".\SS_Log\SS_Log.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name Utils
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "SS_Log_AddIn"=".\SS_Log_AddIn\SS_Log_AddIn.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name SS_Log_Window
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "SS_Log_Test"=".\SS_Log_Test\SS_Log_Test.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name SS_Log_AddIn
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "SS_Log_Window"=".\SS_Log_Window\SS_Log_Window.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name SS_Log
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "Utils"=".\Utils\Utils.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Global:
+
+Package=<5>
+{{{
+}}}
+
+Package=<3>
+{{{
+}}}
+
+###############################################################################
+
