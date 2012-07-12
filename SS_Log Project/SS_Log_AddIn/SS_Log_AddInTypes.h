@@ -1,30 +1,43 @@
+
+
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
-/* File created by MIDL compiler version 5.01.0164 */
-/* at Mon Nov 26 15:11:49 2001
+ /* File created by MIDL compiler version 6.00.0366 */
+/* at Thu Jul 12 18:25:19 2012
  */
-/* Compiler settings for C:\VS Projects\SS_Log\SS_Log_AddIn\SS_Log_AddIn.odl:
-    Os (OptLev=s), W1, Zp8, env=Win32, ms_ext, c_ext
+/* Compiler settings for .\SS_Log_AddIn.odl:
+    Oicf, W1, Zp8, env=Win32 (32b run)
+    protocol : dce , ms_ext, c_ext, robust
     error checks: allocation ref bounds_check enum stub_data 
+    VC __declspec() decoration level: 
+         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
+         DECLSPEC_UUID(), MIDL_INTERFACE()
 */
 //@@MIDL_FILE_HEADING(  )
+
+#pragma warning( disable: 4049 )  /* more than 64k source lines */
 
 
 /* verify that the <rpcndr.h> version is high enough to compile this file*/
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
-#define __REQUIRED_RPCNDR_H_VERSION__ 440
+#define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
 
 #include "rpc.h"
 #include "rpcndr.h"
 
+#ifndef __RPCNDR_H_VERSION__
+#error this stub requires an updated version of <rpcndr.h>
+#endif // __RPCNDR_H_VERSION__
+
+
 #ifndef __SS_Log_AddInTypes_h__
 #define __SS_Log_AddInTypes_h__
 
-#ifdef __cplusplus
-extern "C"{
-#endif 
+#if defined(_MSC_VER) && (_MSC_VER >= 1020)
+#pragma once
+#endif
 
 /* Forward Declarations */ 
 
@@ -46,32 +59,12 @@ typedef struct Commands Commands;
 #endif 	/* __Commands_FWD_DEFINED__ */
 
 
-#ifndef __ApplicationEvents_FWD_DEFINED__
-#define __ApplicationEvents_FWD_DEFINED__
-
 #ifdef __cplusplus
-typedef class ApplicationEvents ApplicationEvents;
-#else
-typedef struct ApplicationEvents ApplicationEvents;
-#endif /* __cplusplus */
+extern "C"{
+#endif 
 
-#endif 	/* __ApplicationEvents_FWD_DEFINED__ */
-
-
-#ifndef __DebuggerEvents_FWD_DEFINED__
-#define __DebuggerEvents_FWD_DEFINED__
-
-#ifdef __cplusplus
-typedef class DebuggerEvents DebuggerEvents;
-#else
-typedef struct DebuggerEvents DebuggerEvents;
-#endif /* __cplusplus */
-
-#endif 	/* __DebuggerEvents_FWD_DEFINED__ */
-
-
-void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
-void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
+void * __RPC_USER MIDL_user_allocate(size_t);
+void __RPC_USER MIDL_user_free( void * ); 
 
 
 #ifndef __SS_Log_AddIn_LIBRARY_DEFINED__
@@ -108,55 +101,55 @@ DEFINE_GUID(IID_ICommands,0xBA3F3B08,0x7605,0x43C2,0x82,0x99,0xEF,0xAF,0x97,0x7E
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ICommands __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ICommands * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ICommands __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ICommands * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ICommands __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ICommands * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            ICommands __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ICommands * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            ICommands __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ICommands * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            ICommands __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ICommands * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            ICommands __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ICommands * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SS_Log_AddInCommandMethod )( 
-            ICommands __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SS_Log_AddInCommandMethod )( 
+            ICommands * This);
         
         END_INTERFACE
     } ICommandsVtbl;
 
     interface ICommands
     {
-        CONST_VTBL struct ICommandsVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ICommandsVtbl *lpVtbl;
     };
 
     
@@ -198,7 +191,7 @@ DEFINE_GUID(IID_ICommands,0xBA3F3B08,0x7605,0x43C2,0x82,0x99,0xEF,0xAF,0x97,0x7E
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE ICommands_SS_Log_AddInCommandMethod_Proxy( 
-    ICommands __RPC_FAR * This);
+    ICommands * This);
 
 
 void __RPC_STUB ICommands_SS_Log_AddInCommandMethod_Stub(
@@ -219,22 +212,6 @@ DEFINE_GUID(CLSID_Commands,0x2546CC08,0x5803,0x471C,0x88,0x25,0x6D,0x6E,0xB0,0x7
 class DECLSPEC_UUID("2546CC08-5803-471C-8825-6D6EB071FCD7")
 Commands;
 #endif
-
-DEFINE_GUID(CLSID_ApplicationEvents,0x9314F28B,0x5EB6,0x450E,0x96,0x0F,0x27,0x99,0x65,0x34,0xAE,0xE0);
-
-#ifdef __cplusplus
-
-class DECLSPEC_UUID("9314F28B-5EB6-450E-960F-27996534AEE0")
-ApplicationEvents;
-#endif
-
-DEFINE_GUID(CLSID_DebuggerEvents,0xF7119C0F,0x1D34,0x442D,0xA0,0xCE,0x01,0xFB,0xA7,0xC9,0xA1,0x5F);
-
-#ifdef __cplusplus
-
-class DECLSPEC_UUID("F7119C0F-1D34-442D-A0CE-01FBA7C9A15F")
-DebuggerEvents;
-#endif
 #endif /* __SS_Log_AddIn_LIBRARY_DEFINED__ */
 
 /* Additional Prototypes for ALL interfaces */
@@ -246,3 +223,5 @@ DebuggerEvents;
 #endif
 
 #endif
+
+

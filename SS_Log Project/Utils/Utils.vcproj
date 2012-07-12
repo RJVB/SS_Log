@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="8.00"
 	Name="Utils"
-	ProjectGUID="{0526D8FD-C333-45D4-A561-CC8BC8795C26}"
+	ProjectGUID="{4CE7DFE7-BC4B-49F0-A01A-28D69B3C055F}"
 	>
 	<Platforms>
 		<Platform
@@ -116,14 +116,10 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				EnableIntrinsicFunctions="true"
-				EnableFiberSafeOptimizations="false"
-				WholeProgramOptimization="false"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
 				StringPooling="true"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="true"
-				EnableEnhancedInstructionSet="2"
 				PrecompiledHeaderFile=".\Release/Utils.pch"
 				AssemblerListingLocation=".\Release/"
 				ObjectFile=".\Release/"

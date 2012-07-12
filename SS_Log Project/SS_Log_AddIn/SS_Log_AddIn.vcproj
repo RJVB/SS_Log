@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8,00"
+	Version="8.00"
 	Name="SS_Log_AddIn"
-	ProjectGUID="{65E629D9-B56D-4F02-9692-7D7E6FDED269}"
+	ProjectGUID="{C08EBE5D-4CA2-4746-A9E5-4A6DCD719AF0}"
 	Keyword="MFCProj"
 	>
 	<Platforms>

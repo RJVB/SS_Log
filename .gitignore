@@ -5,3 +5,17 @@ kk*
 *.suo
 *.sdf
 *.bak
+*.tlog
+BuildLog*
+*.lastbuildstate
+*.lib
+*.obj
+*.pdb
+*.idb
+*.tlb
+*.ncb
+*.unsuccessfulbuild
+*.dep
+*.exe
+*.manifest
+*.pch

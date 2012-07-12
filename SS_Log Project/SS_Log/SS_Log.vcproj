@@ -3,8 +3,7 @@
 	ProjectType="Visual C++"
 	Version="8.00"
 	Name="SS_Log"
-	ProjectGUID="{2DD480FD-4266-46F5-BC56-8BD42C7F7D05}"
-	RootNamespace="SS_Log"
+	ProjectGUID="{2EE496E7-93B7-4134-8019-7D0EFB000421}"
 	>
 	<Platforms>
 		<Platform
@@ -43,17 +42,11 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				EnableIntrinsicFunctions="true"
-				FavorSizeOrSpeed="1"
-				OmitFramePointers="true"
-				EnableFiberSafeOptimizations="false"
-				WholeProgramOptimization="false"
 				AdditionalIncludeDirectories="..\utils"
 				PreprocessorDefinitions="NDEBUG;_SS_LOG_ACTIVE;WIN32;_LIB"
 				StringPooling="true"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="true"
-				EnableEnhancedInstructionSet="2"
 				PrecompiledHeaderFile=".\Release/SS_Log.pch"
 				AssemblerListingLocation=".\Release/"
 				ObjectFile=".\Release/"
@@ -74,9 +67,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				AdditionalDependencies="Utils.lib"
 				OutputFile=".\Release\SS_Log.lib"
-				AdditionalLibraryDirectories="&quot;$(ProjectDir)\..\Utils\Release&quot;"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -151,9 +142,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				AdditionalDependencies="UtilsD.lib"
 				OutputFile="Debug\SS_LogD.lib"
-				AdditionalLibraryDirectories="&quot;$(ProjectDir)\..\Utils\Debug&quot;"
 				SuppressStartupBanner="true"
 			/>
 			<Tool

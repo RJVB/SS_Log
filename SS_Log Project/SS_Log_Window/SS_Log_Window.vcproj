@@ -3,8 +3,7 @@
 	ProjectType="Visual C++"
 	Version="8.00"
 	Name="SS_Log_Window"
-	ProjectGUID="{039FF533-3DF8-4A98-A842-6021F64ACBF3}"
-	RootNamespace="SS_Log_Window"
+	ProjectGUID="{6253847C-D343-479D-B428-E767211A66ED}"
 	Keyword="MFCProj"
 	>
 	<Platforms>
@@ -151,16 +150,11 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				EnableIntrinsicFunctions="true"
-				OmitFramePointers="true"
-				EnableFiberSafeOptimizations="true"
-				WholeProgramOptimization="true"
 				AdditionalIncludeDirectories="..\utils,..\SS_Log"
 				PreprocessorDefinitions="NDEBUG;_SS_LOG_ACTIVE;WIN32;_WINDOWS"
 				StringPooling="true"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="true"
-				EnableEnhancedInstructionSet="2"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="stdafx.h"
 				PrecompiledHeaderFile=".\Release/SS_Log_Window.pch"
@@ -191,7 +185,6 @@
 				IgnoreDefaultLibraryNames="libc.lib"
 				ProgramDatabaseFile=".\Release/SS_Log_Window.pdb"
 				SubSystem="2"
-				LinkTimeCodeGeneration="1"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -422,14 +415,6 @@
 			Name="Resource Files"
 			Filter="ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 			>
-			<File
-				RelativePath=".\res\Console.ico"
-				>
-			</File>
-			<File
-				RelativePath=".\res\LogFile.ico"
-				>
-			</File>
 			<File
 				RelativePath="res\SS_Log_Window.ico"
 				>
