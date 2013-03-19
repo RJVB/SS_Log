@@ -24,7 +24,12 @@ int g_nLine;
 
 VOID WriteLog(SS_Log* pLog, DWORD dwFilter, TCHAR* pMsg, va_list* args)
 {
-    pLog->WriteLog(g_szFile, g_nLine, dwFilter, pMsg, args);
+    if( pLog->LocationSet() ){
+        pLog->WriteLog(dwFilter, pMsg, args);
+    }
+    else{
+        pLog->WriteLog(g_szFile, g_nLine, dwFilter, pMsg, args);
+    }
 }
 
 VOID WriteLog(SS_Log* pLog, DWORD dwFilter, TCHAR* pMsg, ...)

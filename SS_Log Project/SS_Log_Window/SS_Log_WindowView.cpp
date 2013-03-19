@@ -219,6 +219,7 @@ int CALLBACK ListCtrlSortItems(LPARAM lParam1, LPARAM lParam2,
     	break;
     case SSLW_COLUMN_LINE:
     case SSLW_COLUMN_ENTRY:
+    case SSLW_COLUMN_THREAD:
         {
             int nLine1 = _ttoi(cs1.GetBuffer(10));
             int nLine2 = _ttoi(cs2.GetBuffer(10));
@@ -317,6 +318,7 @@ void SS_Log_WindowView::OnInitialUpdate()
 		GetListCtrl().InsertColumn(SSLW_COLUMN_MESSAGE, _T("Message"), LVCFMT_LEFT, 520, -1);
 		GetListCtrl().InsertColumn(SSLW_COLUMN_FILE, _T("File"), LVCFMT_LEFT, 130, -1);
 		GetListCtrl().InsertColumn(SSLW_COLUMN_LINE, _T("Line #"), LVCFMT_LEFT, 50, -1);
+        GetListCtrl().InsertColumn(SSLW_COLUMN_THREAD, _T("Thread"), LVCFMT_LEFT, 50, -1);
         GetListCtrl().InsertColumn(SSLW_COLUMN_LEVEL, _T("Level"), LVCFMT_LEFT, 50, -1);
 
         GetListCtrl().SetExtendedStyle(LVS_EX_GRIDLINES|LVS_EX_FULLROWSELECT|
@@ -400,7 +402,7 @@ void SS_Log_WindowView::ToggleHeld()
 // from http://us.generation-nt.com/answer/copying-contents-listview-report-mode-help-7183412.html
 void SS_Log_WindowView::ToClipBoard()
 { CListCtrl &log = GetListCtrl();
-  CString sSelection = "", sRow, sID, sTimeDate, sMsg, sFile, sLineNr;
+  CString sSelection = "", sRow, sID, sTimeDate, sMsg, sFile, sLineNr, sThread;
   int row;
   POSITION line = log.GetFirstSelectedItemPosition();
 
@@ -413,7 +415,8 @@ void SS_Log_WindowView::ToClipBoard()
 			sMsg = log.GetItemText(row, SSLW_COLUMN_MESSAGE);
 			sFile = log.GetItemText(row, SSLW_COLUMN_FILE);
 			sLineNr = log.GetItemText(row, SSLW_COLUMN_LINE);
-			sRow.Format( "#%s %s (%s::%s):\t%s\n", sID, sTimeDate, sFile, sLineNr, sMsg );
+			sThread = log.GetItemText(row, SSLW_COLUMN_THREAD);
+			sRow.Format( "#%s %s[%s] (%s::%s):\t%s\n", sID, sTimeDate, sThread, sFile, sLineNr, sMsg );
 			sSelection += sRow;
 		}
 		if( OpenClipboard() ){
@@ -449,7 +452,7 @@ VOID SS_Log_WindowView::WriteLog(TCHAR *szLog)
     TCHAR chrTmp = '\0';
     TCHAR szEntry[32];
 	
-    LVITEM newline, entry, timedate, prog, file, line, level, message;
+    LVITEM newline, entry, timedate, prog, file, line, thread, level, message;
 	int lines = 0, loop = 0;
 
 	do{
@@ -515,7 +518,20 @@ VOID SS_Log_WindowView::WriteLog(TCHAR *szLog)
 				szTok = &c[1];
 			}
 
-			level = line;
+			thread = line;
+	//		szTok = _tcstok( NULL, _T("\t") );
+			if( (c = strchr(szTok, '\t')) ){
+				*c = '\0';
+			}
+			thread.pszText = szTok;
+			thread.iSubItem = SSLW_COLUMN_THREAD;
+			GetListCtrl().SetItem(&thread);
+			if( c ){
+				*c = '\t';
+				szTok = &c[1];
+			}
+
+			level = thread;
 	//		szTok = _tcstok( NULL, _T("\t") );
 			if( (c = strchr(szTok, '\t')) ){
 				*c = '\0';
@@ -616,6 +632,13 @@ VOID SS_Log_WindowView::ReadLog(TCHAR *szText, int nItem, int nSize)
     nSize -= _tcslen(_T("\t"));
     
     item.iSubItem = SSLW_COLUMN_LINE;
+    GetListCtrl().GetItem(&item);
+    _tcsncat( szText, szTextIn, nSize );
+    nSize -= _tcslen(szTextIn);
+    _tcsncat( szText, _T("\t"), nSize );
+    nSize -= _tcslen(_T("\t"));
+    
+    item.iSubItem = SSLW_COLUMN_THREAD;
     GetListCtrl().GetItem(&item);
     _tcsncat( szText, szTextIn, nSize );
     nSize -= _tcslen(szTextIn);

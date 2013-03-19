@@ -18,6 +18,7 @@ typedef enum SSLWColumn
     SSLW_COLUMN_MESSAGE,
     SSLW_COLUMN_FILE,
     SSLW_COLUMN_LINE,
+    SSLW_COLUMN_THREAD,
     SSLW_COLUMN_LEVEL,
     SSLW_COLUMN_COUNT // this MUST be the last item in the list
 };

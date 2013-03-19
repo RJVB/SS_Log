@@ -19,3 +19,5 @@ BuildLog*
 *.exe
 *.manifest
 *.pch
+build
+SS_Log.xcodeproj

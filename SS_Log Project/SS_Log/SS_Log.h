@@ -123,12 +123,12 @@ class SS_Log
 public:
 
     // construction, destruction, assignment, copy, initialization
-	SS_Log                                  ();
+    SS_Log                                  ();
     SS_Log                                  (LPCTSTR szFilename, LPCTSTR szWindowName);
     ~SS_Log                                 ();
 
-	SS_Log							        (SS_Log& rhs);
-	SS_Log&			    operator =		    (SS_Log& rhs);
+    SS_Log							        (SS_Log& rhs);
+    SS_Log&			    operator =		    (SS_Log& rhs);
 
 protected:
 
@@ -149,9 +149,12 @@ public:
     VOID                ProgName            (LPCTSTR szProgName);
     
     // utilities
+    VOID                StoreFileLine       (TCHAR *szFile, int nLine);
     VOID                WriteLog            (TCHAR* szFile, int nLine, DWORD dwFilter, 
 											 TCHAR* pMsg, va_list* args);
+    VOID                WriteLog            (DWORD dwFilter, TCHAR* pMsg, va_list* args);
     VOID                EraseLog            ();
+    inline BOOL         LocationSet         (){ return m_bLocationSet; }
     
 protected:
     
@@ -161,7 +164,10 @@ protected:
     LONG                GetFilterFromReg    (DWORD& dwFilter);
     const HANDLE        FileHandle          () const;
     VOID                FileHandle          (const HANDLE hFile);
-    
+    TCHAR               m_szFile[MAX_PATH]; 
+    int                 m_nLine;
+    BOOL                m_bLocationSet;
+
 private:
     
     DWORD               m_dwFilter;         // the filter used when not otherwise specified

@@ -371,8 +371,8 @@ VOID SS_Log::WriteLog( TCHAR* szFile, int nLine, DWORD dwFilterLog,
     SYSTEMTIME  ust;
     SYSTEMTIME  lst;
     DWORD       dwFilterReg;
-    TCHAR       szFinalFormat1[256] = _T("%s\t%s\t%d\t%s\t%s");
-    TCHAR       szFinalFormat2[256] = _T("%s [%s]\t%s\t%d\t%s\t%s");
+    TCHAR       szFinalFormat1[256] = _T("%s\t%s\t%d\t%lu\t%s\t%s");
+    TCHAR       szFinalFormat2[256] = _T("%s [%s]\t%s\t%d\t%lu\t%s\t%s");
     DWORD       dwFilterLevelReg;
     DWORD       dwFilterLevelLog;
 #ifdef _DEBUG
@@ -380,7 +380,9 @@ VOID SS_Log::WriteLog( TCHAR* szFile, int nLine, DWORD dwFilterLog,
 #else // _DEBUG
     DWORD       dwFilterBuild = LOGTYPE_RELEASE;
 #endif // _DEBUG            
-        
+
+    m_bLocationSet = 0;
+
     // prep the filter... if we are using the default filter, just
     // use it as is.  If not, we need to add the default LOGTYPE_OUTPUTS
     // and default LOGTYPE_BUILDS type filters
@@ -426,10 +428,10 @@ VOID SS_Log::WriteLog( TCHAR* szFile, int nLine, DWORD dwFilterLog,
     
     // prep the final output buffer
 	if( *ProgName() ){
-		sprintf(szFinalBuffer, szFinalFormat2, szTime, ProgName(), szFile, nLine, szLevel, szBuffer);
+		sprintf(szFinalBuffer, szFinalFormat2, szTime, ProgName(), szFile, nLine, GetCurrentThreadId(), szLevel, szBuffer);
 	}
 	else{
-		sprintf(szFinalBuffer, szFinalFormat1, szTime, szFile, nLine, szLevel, szBuffer);
+		sprintf(szFinalBuffer, szFinalFormat1, szTime, szFile, nLine, GetCurrentThreadId(), szLevel, szBuffer);
 	}
     
     // Here is the filter meat.  Basically, the 'if' statement checks the
@@ -490,6 +492,20 @@ VOID SS_Log::WriteLog( TCHAR* szFile, int nLine, DWORD dwFilterLog,
 
 #endif // _SS_LOG_ACTIVE
     
+}
+
+VOID SS_Log::WriteLog( DWORD dwFilterLog, TCHAR* pMsg, va_list* args )
+{
+#ifdef _SS_LOG_ACTIVE
+    WriteLog( m_szFile, m_nLine, dwFilterLog, pMsg, args );
+#endif // _SS_LOG_ACTIVE
+}
+
+VOID SS_Log::StoreFileLine(TCHAR *szFile, int nLine)
+{
+	_tcscpy(m_szFile, szFile);
+	m_nLine = nLine;
+    m_bLocationSet = 1;
 }
 
 // ----------------------------------------------------------------------- //

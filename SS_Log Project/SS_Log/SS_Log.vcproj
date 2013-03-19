@@ -67,8 +67,9 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
+				AdditionalDependencies="..\Utils\Release\Utils.lib"
 				OutputFile=".\Release\SS_Log.lib"
-				SuppressStartupBanner="true"
+				SuppressStartupBanner="false"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -142,6 +143,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
+				AdditionalDependencies="..\Utils\Debug\UtilsD.lib"
 				OutputFile="Debug\SS_LogD.lib"
 				SuppressStartupBanner="true"
 			/>
@@ -165,6 +167,10 @@
 		</Configuration>
 	</Configurations>
 	<References>
+		<ProjectReference
+			ReferencedProjectIdentifier="{4CE7DFE7-BC4B-49F0-A01A-28D69B3C055F}"
+			RelativePathToProject=".\Utils\Utils.vcproj"
+		/>
 	</References>
 	<Files>
 		<Filter
