@@ -454,6 +454,7 @@ VOID SS_Log_WindowView::WriteLog(TCHAR *szLog)
 	
     LVITEM newline, entry, timedate, prog, file, line, thread, level, message;
 	int lines = 0, loop = 0;
+    BOOL hasThreadField = FALSE;
 
 	do{
 		newline.mask = LVIF_TEXT|LVIF_PARAM;
@@ -475,6 +476,12 @@ VOID SS_Log_WindowView::WriteLog(TCHAR *szLog)
 		entry.pszText = szEntry;
 		entry.iSubItem = SSLW_COLUMN_ENTRY;
 		GetListCtrl().SetItem(&entry);
+
+        if( szLog[0] == 'T' ){
+            // 20130320: flag indicating that the thread field is present.
+            hasThreadField = TRUE;
+            szLog++;
+        }
 
 		timedate = entry;
 //		szTok = _tcstok( szLog, _T("\t") );
@@ -518,18 +525,20 @@ VOID SS_Log_WindowView::WriteLog(TCHAR *szLog)
 				szTok = &c[1];
 			}
 
-			thread = line;
-	//		szTok = _tcstok( NULL, _T("\t") );
-			if( (c = strchr(szTok, '\t')) ){
-				*c = '\0';
-			}
-			thread.pszText = szTok;
-			thread.iSubItem = SSLW_COLUMN_THREAD;
-			GetListCtrl().SetItem(&thread);
-			if( c ){
-				*c = '\t';
-				szTok = &c[1];
-			}
+            thread = line;
+            if( hasThreadField ){
+        //		szTok = _tcstok( NULL, _T("\t") );
+                if( (c = strchr(szTok, '\t')) ){
+                    *c = '\0';
+                }
+                thread.pszText = szTok;
+                thread.iSubItem = SSLW_COLUMN_THREAD;
+                GetListCtrl().SetItem(&thread);
+                if( c ){
+                    *c = '\t';
+                    szTok = &c[1];
+                }
+            }
 
 			level = thread;
 	//		szTok = _tcstok( NULL, _T("\t") );

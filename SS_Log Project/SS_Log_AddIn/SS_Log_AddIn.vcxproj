@@ -11,7 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{65E629D9-B56D-4F02-9692-7D7E6FDED269}</ProjectGuid>
+    <ProjectGuid>{C08EBE5D-4CA2-4746-A9E5-4A6DCD719AF0}</ProjectGuid>
     <Keyword>MFCProj</Keyword>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -216,7 +216,7 @@ regsvr32 /s %SYSTEMROOT%\SS_Log_AddIn.dll
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SS_Log_Window\SS_Log_Window.vcxproj">
-      <Project>{039ff533-3df8-4a98-a842-6021f64acbf3}</Project>
+      <Project>{6253847c-d343-479d-b428-e767211a66ed}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
   </ItemGroup>

@@ -34,6 +34,7 @@ typedef struct tagFindWindow
 {
     TCHAR   szWindowName[MAX_PATH];
     HWND    hWnd;
+    DWORD   queries;
 } SS_FIND_WINDOW;
 
 // ------------------[         Global Variables        ]------------------ //
@@ -50,11 +51,18 @@ BOOL CALLBACK EnumWindowsProc( HWND hwnd, LPARAM lParam )
     SS_FIND_WINDOW* pFindWindow = (SS_FIND_WINDOW*)lParam;
 
     TCHAR szText[256];
-    GetWindowText(hwnd, szText, 256);
-    if( !_tcscmp(szText, pFindWindow->szWindowName) )
-    {
-        pFindWindow->hWnd = hwnd;
-        return FALSE;
+    int n;
+    DWORD pID = 0;
+    GetWindowThreadProcessId(hwnd, &pID);
+    // GetWindowText can block if we query one of our own windows that is currently unresponsive (e.g. because we're querying...)
+    if( pID != GetCurrentProcessId() ){
+        pFindWindow->queries += 1;
+	    n = GetWindowText(hwnd, szText, 256);
+	    if( n && pFindWindow && !_tcsncmp( szText, pFindWindow->szWindowName, n )  )
+	    {
+		   pFindWindow->hWnd = hwnd;
+		   return FALSE;
+	    }
     }
 
     return TRUE;
@@ -94,6 +102,9 @@ SS_Log::~SS_Log()
 {
     delete m_szLogFile;
     m_szLogFile = NULL;
+    if( m_hNamedPipe ){
+        CloseHandle(m_hNamedPipe);
+    }
 }
 
 // copy constructor
@@ -127,7 +138,9 @@ VOID SS_Log::InitObject()
     m_szLogFile = new TCHAR[MAX_PATH];
     GetLogFileFromReg(m_szLogFile, dwSize);
     m_szLogWindow = new TCHAR[MAX_PATH];
-    _tcscpy( m_szLogWindow, _T("Default Log Window") );
+    m_szPipeName = new TCHAR[MAX_PATH];
+    m_hNamedPipe = NULL;
+    WindowName( _T("Default Log Window") );
     m_szProgName= new TCHAR[MAX_PATH];
     _tcscpy( m_szProgName, _T("") );
     FileHandle(NULL);
@@ -310,6 +323,18 @@ LONG SS_Log::GetFilterFromReg(DWORD& dwFilter)
     return lResult;
 }
 
+// set the log window's name
+VOID SS_Log::WindowName(LPCTSTR szLogWindow)
+{
+    ASSERT(szLogWindow && _tcslen(szLogWindow));
+    _tcscpy(m_szLogWindow, szLogWindow);
+    sprintf( m_szPipeName, _T("\\\\.\\pipe\\%s"), m_szLogWindow );
+    if( m_hNamedPipe ){
+        CloseHandle(m_hNamedPipe);
+        m_hNamedPipe = NULL;
+    }
+}
+
 // ----------------------------------------------------------------------- //
 //  Function:		SS_Log::WriteLog()
 //  Author:			Steve Schaneville
@@ -371,8 +396,9 @@ VOID SS_Log::WriteLog( TCHAR* szFile, int nLine, DWORD dwFilterLog,
     SYSTEMTIME  ust;
     SYSTEMTIME  lst;
     DWORD       dwFilterReg;
-    TCHAR       szFinalFormat1[256] = _T("%s\t%s\t%d\t%lu\t%s\t%s");
-    TCHAR       szFinalFormat2[256] = _T("%s [%s]\t%s\t%d\t%lu\t%s\t%s");
+    // 20130320: prepended a T to indicate the presence of the thread field
+    TCHAR       szFinalFormat1[256] = _T("T%s\t%s\t%d\t%lu\t%s\t%s");
+    TCHAR       szFinalFormat2[256] = _T("T%s [%s]\t%s\t%d\t%lu\t%s\t%s");
     DWORD       dwFilterLevelReg;
     DWORD       dwFilterLevelLog;
 #ifdef _DEBUG
@@ -478,14 +504,24 @@ VOID SS_Log::WriteLog( TCHAR* szFile, int nLine, DWORD dwFilterLog,
         {
             // log to window
             if( OpenLogWindow() ){
-			 DWORD dwBytesRead = 0;
-			 TCHAR szPipeName[MAX_PATH];
-			  sprintf( szPipeName, _T("\\\\.\\pipe\\%s"), WindowName() );
-				BOOL bResult = WaitNamedPipe(szPipeName, 20000);
-			  bResult = CallNamedPipe(szPipeName, (LPVOID)szFinalBuffer, 
-								 _tcslen(szFinalBuffer)+1, (LPVOID)NULL, 
-								 0, &dwBytesRead, 
-								 5000);
+                DWORD dwBytesRead = 0;
+				BOOL bResult = WaitNamedPipe(WindowPipeName(), 20000);
+// 20130320: creating a file HANDLE corresponding to our named pipe would preempt access to the log viewer
+// to the 1st client creating the HANDLE. While this could be OK in certain situations it also requires
+// changes to the viewer's pipe reading loop, to prevent it from blocking after the 1st message.
+//                if( bResult && !m_hNamedPipe ){
+//                    m_hNamedPipe = ::CreateFile( WindowPipeName(), GENERIC_READ|GENERIC_WRITE,
+//                                                FILE_SHARE_DELETE|FILE_SHARE_READ|FILE_SHARE_WRITE, NULL,
+//                                               OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 
+//                                               NULL );
+//                    if( m_hNamedPipe == INVALID_HANDLE_VALUE ){
+//                        m_hNamedPipe = NULL;
+//                    }
+//                }
+                bResult = CallNamedPipe(WindowPipeName(), (LPVOID)szFinalBuffer, 
+                                 _tcslen(szFinalBuffer)+1, (LPVOID)NULL, 
+                                 0, &dwBytesRead, 
+                                 5000);
 		  }
         }
     }
@@ -536,6 +572,7 @@ BOOL SS_Log::OpenLogWindow()
     SS_FIND_WINDOW findWindow;
     _tcscpy( findWindow.szWindowName, WindowName() );
     findWindow.hWnd = NULL;
+    findWindow.queries = 0;
     EnumWindows( lpEnumFunc, (LPARAM)&findWindow );
     if( !findWindow.hWnd )
     {
@@ -603,10 +640,8 @@ VOID SS_Log::EraseLog()
     {
         DWORD dwBytesRead = 0;
         TCHAR szBuffer[] = _T("~~WMSS_LOG_ERASE_LOG~~");
-        TCHAR szPipeName[MAX_PATH];
-        sprintf( szPipeName, _T("\\\\.\\pipe\\%s"), WindowName() );
 
-        BOOL bResult = CallNamedPipe(szPipeName, szBuffer, 
+        BOOL bResult = CallNamedPipe(WindowPipeName(), szBuffer, 
             _tcslen(szBuffer)+1, (LPVOID)NULL, 
             0, &dwBytesRead, 
             NMPWAIT_USE_DEFAULT_WAIT);

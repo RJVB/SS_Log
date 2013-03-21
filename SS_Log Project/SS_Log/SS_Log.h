@@ -145,6 +145,7 @@ public:
     VOID                Filename            (LPCTSTR szWindowName);
     LPCTSTR             WindowName          () const;
     VOID                WindowName          (LPCTSTR szWindowName);
+    LPCTSTR             WindowPipeName      () const;
     LPCTSTR             ProgName            () const;
     VOID                ProgName            (LPCTSTR szProgName);
     
@@ -173,8 +174,10 @@ private:
     DWORD               m_dwFilter;         // the filter used when not otherwise specified
     LPTSTR              m_szLogFile;        // the filename to write to
     LPTSTR              m_szLogWindow;      // the name of the window to write to
+    LPTSTR              m_szPipeName;       // the named pipe connected to the log window process
 	LPTSTR				m_szProgName;		// the name of the programme that called us.
     HANDLE              m_hLogFile;         // handle to the file to write to
+    HANDLE              m_hNamedPipe;
 	// RJVB 20110313: did we already warn about a missing SS_Log_Window.exe for this log file?
 	BOOL				m_warnedLogWindowMissing;
 	unsigned short		m_OpenLogWindowAttempts;
@@ -211,9 +214,9 @@ inline VOID SS_Log::Filename(LPCTSTR szFilename)
 inline LPCTSTR SS_Log::WindowName() const
 { return m_szLogWindow; }
 
-// set the log window's name
-inline VOID SS_Log::WindowName(LPCTSTR szLogWindow)
-{ ASSERT(szLogWindow && _tcslen(szLogWindow)); _tcscpy(m_szLogWindow, szLogWindow); }
+// return the log window's associated named pipe
+inline LPCTSTR SS_Log::WindowPipeName() const
+{ return m_szPipeName; }
 
 // return the programme name
 inline LPCTSTR SS_Log::ProgName() const
