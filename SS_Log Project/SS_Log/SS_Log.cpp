@@ -34,6 +34,7 @@ typedef struct tagFindWindow
 {
     TCHAR   szWindowName[MAX_PATH];
     HWND    hWnd;
+    HANDLE  process;
     DWORD   queries;
 } SS_FIND_WINDOW;
 
@@ -61,6 +62,7 @@ BOOL CALLBACK EnumWindowsProc( HWND hwnd, LPARAM lParam )
 	    if( n && pFindWindow && !_tcsncmp( szText, pFindWindow->szWindowName, n )  )
 	    {
 		   pFindWindow->hWnd = hwnd;
+           pFindWindow->process = OpenProcess( SYNCHRONIZE|PROCESS_QUERY_INFORMATION, FALSE, pID );
 		   return FALSE;
 	    }
     }
@@ -105,6 +107,9 @@ SS_Log::~SS_Log()
     if( m_hNamedPipe ){
         CloseHandle(m_hNamedPipe);
     }
+    if( m_hLogProcess ){
+        CloseHandle(m_hLogProcess);
+    }
 }
 
 // copy constructor
@@ -144,7 +149,7 @@ VOID SS_Log::InitObject()
     m_szProgName= new TCHAR[MAX_PATH];
     _tcscpy( m_szProgName, _T("") );
     FileHandle(NULL);
-    
+    m_hLogProcess = NULL;
     ASSERT(m_szLogFile);
 
 #ifdef _DEBUG
@@ -568,40 +573,53 @@ BOOL SS_Log::OpenLogWindow()
 #else
     WNDENUMPROC lpEnumFunc = EnumWindowsProc;
 #endif
+    DWORD logStatus = 0;
 
-    SS_FIND_WINDOW findWindow;
-    _tcscpy( findWindow.szWindowName, WindowName() );
-    findWindow.hWnd = NULL;
-    findWindow.queries = 0;
-    EnumWindows( lpEnumFunc, (LPARAM)&findWindow );
-    if( !findWindow.hWnd )
-    {
-		if( m_OpenLogWindowAttempts < 5 || ((m_OpenLogWindowAttempts % 100) == 0) ){
-			PROCESS_INFORMATION pi;
-			STARTUPINFO si;
-			si.lpDesktop = NULL;
-			si.lpTitle = NULL;
-			si.dwFlags = STARTF_USESHOWWINDOW;
-			si.wShowWindow = TRUE;
-			si.cb = sizeof(si);
-			si.cbReserved2 = 0;
-			si.lpReserved = NULL;
-			si.lpReserved2 = NULL;
-	        
-			TCHAR szCommandLine[MAX_PATH];
-			sprintf( szCommandLine, "SS_Log_Window \"%s\"", WindowName() );
-			INT nResult = CreateProcess(NULL, szCommandLine, NULL, NULL, FALSE, 
-				NORMAL_PRIORITY_CLASS, NULL, NULL, &si, &pi);            
-	        
-			Sleep(500);
-			if( !nResult && !m_warnedLogWindowMissing )
-			{
-				::MessageBox(NULL, _T("Could not start the SS_Log_Window.exe application... does it reside in the system path?"), _T("Error"), MB_OK|MB_ICONSTOP);
-				m_warnedLogWindowMissing = TRUE;
-				return FALSE;
-			}
-			m_OpenLogWindowAttempts += 1;
-		}
+    if( !m_hLogProcess || !GetExitCodeProcess(m_hLogProcess, &logStatus) || logStatus != STILL_ACTIVE ){
+      SS_FIND_WINDOW findWindow;
+        _tcscpy( findWindow.szWindowName, WindowName() );
+        findWindow.hWnd = NULL;
+        findWindow.queries = 0;
+        findWindow.process = NULL;
+        EnumWindows( lpEnumFunc, (LPARAM)&findWindow );
+        if( !findWindow.hWnd )
+        {
+            if( m_OpenLogWindowAttempts < 5 || ((m_OpenLogWindowAttempts % 100) == 0) ){
+                PROCESS_INFORMATION pi;
+                STARTUPINFO si;
+                si.lpDesktop = NULL;
+                si.lpTitle = NULL;
+                si.dwFlags = STARTF_USESHOWWINDOW;
+                si.wShowWindow = TRUE;
+                si.cb = sizeof(si);
+                si.cbReserved2 = 0;
+                si.lpReserved = NULL;
+                si.lpReserved2 = NULL;
+                
+                TCHAR szCommandLine[MAX_PATH];
+                sprintf( szCommandLine, "SS_Log_Window \"%s\"", WindowName() );
+                INT nResult = CreateProcess(NULL, szCommandLine, NULL, NULL, FALSE, 
+                    NORMAL_PRIORITY_CLASS, NULL, NULL, &si, &pi);            
+                
+//                Sleep(500);
+                if( !nResult && !m_warnedLogWindowMissing )
+                {
+                    ::MessageBox(NULL, _T("Could not start the SS_Log_Window.exe application... does it reside in the system path?"), _T("Error"), MB_OK|MB_ICONSTOP);
+                    m_warnedLogWindowMissing = TRUE;
+                    return FALSE;
+                }
+                m_OpenLogWindowAttempts += 1;
+                WaitForInputIdle( pi.hProcess, 500 );
+                findWindow.process = pi.hProcess;
+                // apparently this is necessary - pi being a non-optional argument to CreateProcess?!
+                CloseHandle(pi.hThread);
+            }
+        }
+        if( m_hLogProcess ){
+            CloseHandle(m_hLogProcess);
+        }
+        // m_hLogProcess will not be initialised immediately after CreateProcess("SS_Log_Window"):
+        m_hLogProcess = findWindow.process;
     }
 
 #endif // _SS_LOG_ACTIVE

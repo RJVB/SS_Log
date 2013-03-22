@@ -174,6 +174,7 @@ private:
     DWORD               m_dwFilter;         // the filter used when not otherwise specified
     LPTSTR              m_szLogFile;        // the filename to write to
     LPTSTR              m_szLogWindow;      // the name of the window to write to
+    HANDLE              m_hLogProcess;      // handle to the log viewer process
     LPTSTR              m_szPipeName;       // the named pipe connected to the log window process
 	LPTSTR				m_szProgName;		// the name of the programme that called us.
     HANDLE              m_hLogFile;         // handle to the file to write to
