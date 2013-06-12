@@ -340,6 +340,21 @@ VOID SS_Log::WindowName(LPCTSTR szLogWindow)
     }
 }
 
+// MSCV's snprintf does not append a nullbyte if it has to truncate the string to add to the destination.
+// Crashes can result, so we proxy the function and add the nullbyte ourselves if the return value indicates
+// truncation. NB: POSIX snprintf does not return -1 when it truncates (at least not the version on Mac OS X).
+#include <stdarg.h>
+static int snprintf( char *buffer, size_t count, const char *format, ... )
+{ int n;
+  va_list ap;
+	va_start( ap, format );
+	n = _vsnprintf( buffer, count, format, ap );
+	if( n < 0 ){
+		buffer[count-1] = '\0';
+	}
+	return n;
+}
+
 // ----------------------------------------------------------------------- //
 //  Function:		SS_Log::WriteLog()
 //  Author:			Steve Schaneville
@@ -394,7 +409,7 @@ VOID SS_Log::WriteLog( TCHAR* szFile, int nLine, DWORD dwFilterLog,
     
     TCHAR       szBuffer[SSLOG_MAX_MESSAGE_LENGTH];
     TCHAR       szFinalBuffer[SSLOG_MAX_MESSAGE_LENGTH];
-    int         nchars;
+    int         nchars, nfinalChars;
     TCHAR       szTime[256];
     TCHAR       szLevel[256] = _T("");
 	TCHAR       szTimeFormat[256] = _T("%02d.%02d.%02d %02d:%02d:%02d");
@@ -420,7 +435,8 @@ VOID SS_Log::WriteLog( TCHAR* szFile, int nLine, DWORD dwFilterLog,
     SetFilter(dwFilterLog);
     
     // prep sprintf message
-    nchars = _vstprintf(szBuffer, pMsg, *args);
+//    nchars = _vstprintf(szBuffer, pMsg, *args);
+    nchars = _vsnprintf(szBuffer, sizeof(szBuffer), pMsg, *args);
     if( 0 == nchars )
         return;
 
@@ -459,10 +475,10 @@ VOID SS_Log::WriteLog( TCHAR* szFile, int nLine, DWORD dwFilterLog,
     
     // prep the final output buffer
 	if( *ProgName() ){
-		sprintf(szFinalBuffer, szFinalFormat2, szTime, ProgName(), szFile, nLine, GetCurrentThreadId(), szLevel, szBuffer);
+		nfinalChars = snprintf(szFinalBuffer, sizeof(szFinalBuffer), szFinalFormat2, szTime, ProgName(), szFile, nLine, GetCurrentThreadId(), szLevel, szBuffer);
 	}
 	else{
-		sprintf(szFinalBuffer, szFinalFormat1, szTime, szFile, nLine, GetCurrentThreadId(), szLevel, szBuffer);
+		nfinalChars = snprintf(szFinalBuffer, sizeof(szFinalBuffer), szFinalFormat1, szTime, szFile, nLine, GetCurrentThreadId(), szLevel, szBuffer);
 	}
     
     // Here is the filter meat.  Basically, the 'if' statement checks the
@@ -524,7 +540,7 @@ VOID SS_Log::WriteLog( TCHAR* szFile, int nLine, DWORD dwFilterLog,
 //                    }
 //                }
                 bResult = CallNamedPipe(WindowPipeName(), (LPVOID)szFinalBuffer, 
-                                 _tcslen(szFinalBuffer)+1, (LPVOID)NULL, 
+                                 _tcslen(szFinalBuffer)+sizeof(TCHAR), (LPVOID)NULL, 
                                  0, &dwBytesRead, 
                                  5000);
 		  }
