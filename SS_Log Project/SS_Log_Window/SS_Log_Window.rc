@@ -1,6 +1,10 @@
 // Microsoft Visual C++ generated resource script.
 //
+#include <winver.h>
+#include <windows.h>
 #include "resource.h"
+
+CREATEPROCESS_MANIFEST_RESOURCE_ID RT_MANIFEST "res\SS_Log_Window.exe.manifest"
 
 #define APSTUDIO_READONLY_SYMBOLS
 /////////////////////////////////////////////////////////////////////////////

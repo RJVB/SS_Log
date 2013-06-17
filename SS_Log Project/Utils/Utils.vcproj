@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="8.00"
 	Name="Utils"
-	ProjectGUID="{4CE7DFE7-BC4B-49F0-A01A-28D69B3C055F}"
+	ProjectGUID="{0526D8FD-C333-45D4-A561-CC8BC8795C26}"
 	>
 	<Platforms>
 		<Platform

@@ -3,7 +3,8 @@
 	ProjectType="Visual C++"
 	Version="8.00"
 	Name="SS_Log_Window"
-	ProjectGUID="{6253847C-D343-479D-B428-E767211A66ED}"
+	ProjectGUID="{039FF533-3DF8-4A98-A842-6021F64ACBF3}"
+	RootNamespace="SS_Log_Window"
 	Keyword="MFCProj"
 	>
 	<Platforms>
@@ -81,6 +82,8 @@
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\utils\debug"
+				GenerateManifest="false"
+				ManifestFile="$(InputDir)\res\SS_Log_Window.exe.manifest"
 				IgnoreDefaultLibraryNames="libcd.lib"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile=".\Debug/SS_Log_Window.pdb"
@@ -170,6 +173,7 @@
 				ProgramDataBaseFileName=".\Release/"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
+				DebugInformationFormat="0"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -184,12 +188,16 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalOptions="/ManifestFile:&quot;$(InputDir)\res\SS_Log_Window.exe.manifest&quot;"
 				AdditionalDependencies="..\utils\release\utils.lib Version.lib"
 				OutputFile=".\Release/SS_Log_Window.exe"
 				LinkIncremental="1"
-				SuppressStartupBanner="true"
+				SuppressStartupBanner="false"
 				AdditionalLibraryDirectories="..\utils\release"
+				GenerateManifest="false"
+				ManifestFile="$(InputDir)\res\SS_Log_Window.exe.manifest"
 				IgnoreDefaultLibraryNames="libc.lib"
+				GenerateDebugInformation="true"
 				ProgramDatabaseFile=".\Release/SS_Log_Window.pdb"
 				SubSystem="2"
 				LinkTimeCodeGeneration="1"

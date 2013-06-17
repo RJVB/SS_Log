@@ -60,6 +60,15 @@ BOOL SS_Log_WindowApp::InitInstance()
 //#else
 //	Enable3dControlsStatic();	// Call this when linking to MFC statically
 //#endif
+	// Initialise common controls.
+  INITCOMMONCONTROLSEX icc;
+
+	icc.dwSize = sizeof(icc);
+	icc.dwICC = ICC_WIN95_CLASSES|ICC_PROGRESS_CLASS|ICC_BAR_CLASSES|ICC_STANDARD_CLASSES;
+	if( !InitCommonControlsEx(&icc) ){
+		Sleep(1);
+	}
+
 
 	// Change the registry key under which our settings are stored.
 	// TODO: You should modify this string to be something appropriate
