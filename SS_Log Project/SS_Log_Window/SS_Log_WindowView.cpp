@@ -727,11 +727,20 @@ void SS_Log_WindowView::Serialize(CArchive& ar)
 {
     if (ar.IsStoring())
     {	// storing code
-        for( int i=GetListCtrl().GetItemCount()-1; i>-1; i-- )
-        {
-            TCHAR szTextFinal[SSLOG_MAX_MESSAGE_LENGTH];            
-            ReadLog(szTextFinal, i, SSLOG_MAX_MESSAGE_LENGTH);
-            ar.WriteString(szTextFinal);
+        if( m_bGrowUp ){
+            for( int i=GetListCtrl().GetItemCount()-1; i>-1; i-- )
+            {
+                TCHAR szTextFinal[SSLOG_MAX_MESSAGE_LENGTH];            
+                ReadLog(szTextFinal, i, SSLOG_MAX_MESSAGE_LENGTH);
+                ar.WriteString(szTextFinal);
+            }
+        }
+        else{
+            for( int i = 0, N = GetListCtrl().GetItemCount() ; i < N ; i++ ){
+              TCHAR szTextFinal[SSLOG_MAX_MESSAGE_LENGTH];            
+                ReadLog( szTextFinal, i, SSLOG_MAX_MESSAGE_LENGTH );
+                ar.WriteString(szTextFinal);
+            }
         }
     }
     else
