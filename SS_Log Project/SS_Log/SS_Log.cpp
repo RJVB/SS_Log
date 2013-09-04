@@ -519,10 +519,10 @@ VOID SS_Log::WriteLog( TCHAR* szFile, int nLine, DWORD dwFilterLog,
                 
                 DWORD cbWritten;
                 ::WriteFile( hLog, (LPCVOID)szFinalBuffer, 
-                             _tcslen(szFinalBuffer)*sizeof(TCHAR),
+                             (DWORD)_tcslen(szFinalBuffer)*sizeof(TCHAR),
                              &cbWritten, NULL );
                 ::WriteFile( hLog, _T("\n"), 
-                             _tcslen(_T("\n"))*sizeof(TCHAR),
+                             (DWORD)_tcslen(_T("\n"))*sizeof(TCHAR),
                              &cbWritten, NULL );
                 ::FlushFileBuffers(hLog);
                 ::CloseHandle(hLog);
@@ -549,7 +549,7 @@ VOID SS_Log::WriteLog( TCHAR* szFile, int nLine, DWORD dwFilterLog,
 //                    }
 //                }
                 bResult = CallNamedPipe(WindowPipeName(), (LPVOID)szFinalBuffer, 
-                                 _tcslen(szFinalBuffer)+sizeof(TCHAR), (LPVOID)NULL, 
+                                 (DWORD)_tcslen(szFinalBuffer)+sizeof(TCHAR), (LPVOID)NULL, 
                                  0, &dwBytesRead, 
                                  5000);
 		  }
@@ -685,7 +685,7 @@ VOID SS_Log::EraseLog()
         TCHAR szBuffer[] = _T("~~WMSS_LOG_ERASE_LOG~~");
 
         BOOL bResult = CallNamedPipe(WindowPipeName(), szBuffer, 
-            _tcslen(szBuffer)+1, (LPVOID)NULL, 
+            (DWORD)_tcslen(szBuffer)+1, (LPVOID)NULL, 
             0, &dwBytesRead, 
             NMPWAIT_USE_DEFAULT_WAIT);
     }
