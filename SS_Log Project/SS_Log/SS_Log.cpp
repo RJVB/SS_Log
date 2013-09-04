@@ -167,6 +167,7 @@ VOID SS_Log::InitObject()
 	m_warnedLogWindowMissing = FALSE;
 	m_OpenLogWindowAttempts = 0;
 #endif // _SS_LOG_ACTIVE
+	m_bLocationSet = false;
 }
   
 // ----------------------------------------------------------------------- //
@@ -425,9 +426,10 @@ VOID SS_Log::WriteLog( TCHAR* szFile, int nLine, DWORD dwFilterLog,
     DWORD       dwFilterBuild = LOGTYPE_DEBUG;
 #else // _DEBUG
     DWORD       dwFilterBuild = LOGTYPE_RELEASE;
-#endif // _DEBUG            
-
-    m_bLocationSet = 0;
+#endif // _DEBUG
+	extern TCHAR g_szFile[MAX_PATH]; 
+	extern int g_nLine;
+	extern int g_bLocationSet;
 
     // prep the filter... if we are using the default filter, just
     // use it as is.  If not, we need to add the default LOGTYPE_OUTPUTS
@@ -471,7 +473,14 @@ VOID SS_Log::WriteLog( TCHAR* szFile, int nLine, DWORD dwFilterLog,
     }
     if( !_tcscmp(szLevel,_T("")) )
         _tcscat(szLevel, _T(" "));
-    
+
+	if( g_bLocationSet && !m_bLocationSet ){
+		_tcscpy(m_szFile, g_szFile);
+		szFile = m_szFile;
+		nLine = m_nLine = g_nLine;
+		g_bLocationSet = false;
+	}
+	m_bLocationSet = false;
     
     // prep the final output buffer
 	if( *ProgName() ){
@@ -562,7 +571,7 @@ VOID SS_Log::StoreFileLine(TCHAR *szFile, int nLine)
 {
 	_tcscpy(m_szFile, szFile);
 	m_nLine = nLine;
-    m_bLocationSet = 1;
+    m_bLocationSet = true;
 }
 
 // ----------------------------------------------------------------------- //

@@ -21,6 +21,7 @@
 
 TCHAR g_szFile[MAX_PATH]; 
 int g_nLine;
+int g_bLocationSet = false;
 
 VOID WriteLog(SS_Log* pLog, DWORD dwFilter, TCHAR* pMsg, va_list* args)
 {
@@ -76,6 +77,7 @@ VOID LogStoreFileLine(TCHAR* szFile, int nLine)
 {
 	_tcscpy(g_szFile, szFile);
 	g_nLine = nLine;
+	g_bLocationSet = true;
 }
 
 

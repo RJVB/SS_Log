@@ -65,7 +65,7 @@ void main()
 	// In order to erase both the file and window, call the Filter() function 
 	// before calling the EraseLog() function.
 	SS_Log localLog1;
-	localLog1.Filename("\\LocalLog1.log");
+	localLog1.Filename(".\\LocalLog1.log");
 	localLog1.EraseLog();
 	localLog1.Filter(LOGTYPE_LOGTOWINDOW|LOGTYPE_LOGTOFILE|LOGTYPE_WARNING);
 
